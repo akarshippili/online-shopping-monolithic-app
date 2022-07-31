@@ -12,6 +12,16 @@ export default class CustomerRepository {
     }
   }
 
+  async getCustomerById(id) {
+    try {
+      const customer = await CustomerModel.findById(id);
+      return customer;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async registerCustomer({
     email,
     password,

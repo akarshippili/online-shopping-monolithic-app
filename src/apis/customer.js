@@ -1,5 +1,5 @@
 import { CustomerService } from '../services/customerService.js';
-
+import auth from './middlewares/auth.js';
 export default (app) => {
 
     const customerService = new CustomerService();
@@ -24,6 +24,17 @@ export default (app) => {
         } catch (error) {
             console.log(error);
             res.status(500).json(error);
+        }
+    });
+
+    app.get("/api/customers/whoami", auth, async (req, res) => {
+        const id = req.user.id;
+        try {
+            const customer = await customerService.getCustomerById(id);
+            res.status(200).json(customer);
+        } catch(error) {
+            console.log(error);
+            res.status(500).send(error);
         }
     });
 };

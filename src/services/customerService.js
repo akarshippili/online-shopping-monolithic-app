@@ -12,7 +12,20 @@ export class CustomerService {
   }
 
   async getAllCustomers() {}
-  async getCustomerById() {}
+
+  async getCustomerById(id) {
+    try {
+      const customer = await this.customerRepository.getCustomerById(id);
+      if (!customer) {
+        throw new Error("Customer does not exist");
+      }
+      return customer;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async getCustomerByEmail() {
     try {
       const customer = await this.customerRepository.getCustomerByEmail(email);
