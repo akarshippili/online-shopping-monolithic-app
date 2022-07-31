@@ -1,6 +1,6 @@
 import express from 'express';
 import config from './config/index.js';
-import { connection } from './database/index.js';
+import { connection } from './database/index.js'; 
 import expressApp from './express-app.js';
 
 const startServer = async () => {
