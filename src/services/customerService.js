@@ -84,4 +84,21 @@ export class CustomerService {
       throw error;
     }
   }
+
+  async updateAddress(id, address) {
+    try {
+      const customer = await this.customerRepository.getCustomerById(id);
+      if (!customer) {
+        throw new Error("Customer does not exist");
+      }
+      const updatedCustomer = await this.customerRepository.updateAddress(
+        id,
+        address
+      );
+      return updatedCustomer;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }

@@ -1,7 +1,6 @@
-import { CustomerModel } from "../models/index.js";
+import { CustomerModel, AddressModel } from "../models/index.js";
 
 export default class CustomerRepository {
-
   async getCustomerByEmail(email) {
     try {
       const customer = await CustomerModel.findOne({ email });
@@ -51,4 +50,25 @@ export default class CustomerRepository {
     }
   }
 
+  async updateAddress(id, address) {
+    try {
+      const addressModel = new AddressModel({
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zip: address.zip,
+        country: address.country,
+      });
+      const savedAdderess = await addressModel.save();
+      const customer = await CustomerModel.findByIdAndUpdate(
+        id,
+        { address: savedAdderess },
+        { new: true }
+      );
+      return customer;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }

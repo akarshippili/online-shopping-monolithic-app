@@ -37,4 +37,18 @@ export default (app) => {
             res.status(500).send(error);
         }
     });
+
+    app.put("/api/customers/update-address", auth, async (req, res) => {
+        const id = req.user.id;
+        const { street, city, state, zip, country } = req.body;
+        const address = { street, city, state, zip, country };
+        console.log("in customer controller",address);
+        try {
+            const customer = await customerService.updateAddress(id, address);
+            res.status(200).json(customer);
+        } catch(error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+    });
 };
