@@ -1,7 +1,10 @@
-import config from "../config/index.js";
 import { CustomerRepository } from "../database/repository/index.js";
-import { generateSalt, comparePassword, hashPassword } from "../utils/index.js";
-import jsonwebtoken from "jsonwebtoken";
+import {
+  generateSalt,
+  comparePassword,
+  hashPassword,
+  generateToken,
+} from "../utils/index.js";
 
 export class CustomerService {
   constructor() {
@@ -59,8 +62,8 @@ export class CustomerService {
       if (!isValid) {
         throw new Error("Invalid password");
       }
-      const token = jsonwebtoken.sign({ id: customer._id }, config.secret,  {
-        expiresIn: config.jwtExpiration,
+      const token = generateToken({
+        id: customer.id,
       });
       return { token };
     } catch (error) {
