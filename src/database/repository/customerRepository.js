@@ -1,6 +1,7 @@
 import { CustomerModel, AddressModel } from "../models/index.js";
 
 export default class CustomerRepository {
+  
   async getCustomerByEmail(email) {
     try {
       const customer = await CustomerModel.findOne({ email });
