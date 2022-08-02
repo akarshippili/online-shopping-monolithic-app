@@ -6,7 +6,7 @@ import {
   generateToken,
 } from "../utils/index.js";
 
-export class CustomerService {
+export default class CustomerService {
   constructor() {
     this.customerRepository = new CustomerRepository();
   }

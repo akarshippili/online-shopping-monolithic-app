@@ -1,4 +1,4 @@
-import { CustomerService } from '../services/customerService.js';
+import { CustomerService } from '../services/index.js';
 import auth from './middlewares/auth.js';
 export default (app) => {
 
