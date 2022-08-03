@@ -5,10 +5,12 @@ import {
   hashPassword,
   generateToken,
 } from "../utils/index.js";
+import { ProductService } from "../services/index.js";
 
 export default class CustomerService {
   constructor() {
     this.customerRepository = new CustomerRepository();
+    this.productService = new ProductService();
   }
 
   async getAllCustomers() {}
@@ -101,4 +103,40 @@ export default class CustomerService {
       throw error;
     }
   }
+
+  async addToWishlist(customerId, product) {
+    try {
+      const customerWishlist = await this.customerRepository.getWishlist(customerId);
+      if (customerWishlist.includes(product._id)) {
+        throw new Error("Product already in wishlist");
+      }
+      return await this.customerRepository.addToWishlist(customerId, product);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getWishlist(customerId) {
+    try {
+      return await this.customerRepository.getWishlist(customerId);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async deleteFromWishlist(customerId, product) {
+    try {
+      const customerWishlist = await this.customerRepository.getWishlist(customerId);
+      if (!customerWishlist || !customerWishlist.includes(product._id)) {
+        throw new Error("Product not in wishlist");
+      }
+      return await this.customerRepository.deleteFromWishlist(customerId, product);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
 }
