@@ -72,4 +72,39 @@ export default class CustomerRepository {
       throw error;
     }
   }
+
+  async addToWishlist(id, product) {
+    try {
+      const customer = await CustomerModel.findByIdAndUpdate(
+        id,
+        { $push: { wishlist: product } },
+        { new: true }
+      );
+      return customer.wishlist;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getWishlist(id) {
+    try {
+      const customer = await CustomerModel.findById(id).populate("wishlist");
+      return customer.wishlist;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async deleteFromWishlist(id, product) {
+    try {
+      const customer = await CustomerModel.deleteOne({ _id: id, wishlist: product });
+      return customer.wishlist;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
 }
