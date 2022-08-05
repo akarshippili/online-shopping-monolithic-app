@@ -22,6 +22,21 @@ export default class CustomerRepository {
     }
   }
 
+  async getCustomerById(id,populate = true ) {
+    try {
+
+      if(!populate) {
+        return this.getCustomerById(id);
+      }
+
+      const customer = await CustomerModel.findById(id).populate("cart.product").populate("wishlist.product");
+      return customer;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async registerCustomer({
     email,
     password,
