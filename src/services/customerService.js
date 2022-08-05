@@ -139,4 +139,40 @@ export default class CustomerService {
     }
   }
 
+  async addToCart(customerId, product, quantity) {
+    try {
+      if(!quantity) {
+        quantity = 1;
+      }
+      return await this.customerRepository.addToCart(customerId, product, quantity);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getCart(customerId) {
+    try {
+      return await this.customerRepository.getCart(customerId);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async deleteFromCart(customerId, product) {
+    try {
+      const customerCart = await this.customerRepository.getCart(customerId);
+      const productIndex = customerCart.findIndex(item => item.product.toString() === product._id.toString());
+      if (productIndex === -1) {
+        throw new Error("Product not in cart");
+      }
+
+      return await this.customerRepository.deleteFromCart(customerId, product);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
 }

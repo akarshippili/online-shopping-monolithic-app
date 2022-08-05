@@ -107,4 +107,53 @@ export default class CustomerRepository {
     }
   }
 
+  async addToCart(id, product, quantity=1) {
+    try {
+      // if product is already in cart, increase quantity 
+      // else add product to cart
+      const customer = await CustomerModel.findById(id).populate("cart.product");
+      const cart = customer.cart;
+      const productIndex = cart.findIndex(item => item.product._id.toString() === product._id.toString());
+      if (productIndex !== -1) {
+        cart[productIndex].units += quantity;
+      } else {
+        cart.push({ product, units: quantity });
+      }
+
+      const updatedCustomer = await CustomerModel.findByIdAndUpdate(
+        id,
+        { cart },
+        { new: true }
+      );
+
+      return updatedCustomer.cart;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getCart(id) {
+    try {
+      const customer = await CustomerModel.findById(id).populate("cart");
+      return customer.cart;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async deleteFromCart(id, product) {
+    try {
+      const customer = await CustomerModel.findByIdAndUpdate(
+        id,
+        { $pull: { cart: { product: product._id } } },
+        { new: true }
+      );
+      return customer.cart;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }

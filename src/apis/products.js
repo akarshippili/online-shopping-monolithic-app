@@ -43,7 +43,9 @@ export default (app) => {
             res.send(product);
         } catch (error) {
             console.log(error);
-            res.status(500).send(error);
+            res.status(400).send({
+                message: error.message,
+            });
         }
     });
     
@@ -105,7 +107,44 @@ export default (app) => {
         }
     });
 
-    app.post("/api/cart", auth, async (req, res) => {});
-    app.get("/api/cart", auth, async (req, res) => {});
-    app.delete("/api/cart", auth, async (req, res) => {});
+    app.post("/api/cart", auth, async (req, res) => {
+        try {
+            const id = req.user.id;
+            const product = await productService.getProductById(req.body.productId);
+            const quantity = req.body.quantity || 1;
+            const updatedCart = await customerService.addToCart(id, product, quantity);
+            res.send(updatedCart);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: error.message
+            });
+        }
+    });
+
+    app.get("/api/cart", auth, async (req, res) => {
+        try {
+            const cart = await customerService.getCart(req.user.id);
+            res.send(cart);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({
+                message: error.message
+            });
+        }
+    });
+
+    app.delete("/api/cart", auth, async (req, res) => {
+        try {
+            const id = req.user.id;
+            const product = await productService.getProductById(req.body.productId);
+            const cart = await customerService.deleteFromCart(id, product);
+            res.send(cart);
+        } catch (error) {
+            console.log(error);
+            res.status(400).send({
+                message: error.message
+            });
+        }
+    });
 }
