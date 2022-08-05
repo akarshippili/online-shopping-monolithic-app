@@ -128,7 +128,9 @@ export default class CustomerRepository {
       // else add product to cart
       const customer = await CustomerModel.findById(id).populate("cart.product");
       const cart = customer.cart;
+      
       const productIndex = cart.findIndex(item => item.product._id.toString() === product._id.toString());
+
       if (productIndex !== -1) {
         cart[productIndex].units += quantity;
       } else {

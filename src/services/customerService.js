@@ -144,6 +144,13 @@ export default class CustomerService {
       if(!quantity) {
         quantity = 1;
       }
+
+      // check if we have the number of products in stock
+      const productInStock = product.units >= quantity;
+      if (!productInStock) {
+        throw new Error("Not enough products in stock");
+      }
+
       return await this.customerRepository.addToCart(customerId, product, quantity);
     } catch (error) {
       console.log(error);
