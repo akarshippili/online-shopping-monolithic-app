@@ -16,6 +16,12 @@ export default class OrderService {
         let amt = 0;
         for(let i = 0; i < cart.length; i++) {
             const product = await this.productService.getProductById(cart[i].product);
+            
+            // check for stock
+            if(product.units < cart[i].units) {
+                throw new Error("Not enough stock");
+            }
+
             amt += product.price * cart[i].units;
         }
 

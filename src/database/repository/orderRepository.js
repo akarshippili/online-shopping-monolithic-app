@@ -1,4 +1,4 @@
-import {OrderModel, CustomerModel} from "../models/index.js";
+import {OrderModel, CustomerModel, ProductModel} from "../models/index.js";
 
 export default class OrderRepository {
     async getOrderById(id) {}
@@ -35,6 +35,14 @@ export default class OrderRepository {
                 },
             });
 
+            products.forEach(async (item, index) => {
+                await ProductModel.findByIdAndUpdate(
+                    item.product._id, 
+                    {
+                        units: item.product.units - products[index].units,
+                    }
+                );
+            });
             
             return await (await newOrder.populate("customer")).populate("products.product");
         } catch (error) {
