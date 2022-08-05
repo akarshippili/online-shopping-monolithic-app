@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { customer, product } from './apis/index.js';
+import { customer, product, shopping } from './apis/index.js';
 
 export default (app) => {
 
@@ -19,4 +19,5 @@ export default (app) => {
     //api
     customer(app);
     product(app);
+    shopping(app);
 };
