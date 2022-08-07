@@ -3,7 +3,20 @@ import dotEnv from 'dotenv';
 console.log('Loading environment variables...');
 console.log('Node environment:', process.env.NODE_ENV);
 
-dotEnv.config();
+switch (process.env.NODE_ENV) {
+    case 'prod':
+        dotEnv.config({ path: '.env.prod' });
+        break;
+    case 'dev':
+        dotEnv.config({ path: '.env.dev' });
+        break;
+    case 'test':
+        dotEnv.config({ path: '.env.test' });
+        break;
+    default:
+        dotEnv.config({ path: '.env.dev' });
+        break;
+}
 
 export default{
     port: process.env.PORT || 3000,
